@@ -1,0 +1,107 @@
+
+<html>
+<head>
+    <title>Hello Ext</title>
+
+    <script type="text/javascript" src="sdk\ext-6.2.0\build\ext-all.js"></script>
+     <link rel="stylesheet" type="text/css" href="sdk\ext-6.2.0\build\classic\theme-aria\resources\theme-aria-all.css">
+    <script type="text/javascript" src="product.js"></script>
+<script>
+Ext.onReady(function() {
+
+var myData = [
+['Вареники', 180, 20],
+['Маринованные огурцы', 130, 10],
+['Гречка', 70, 20],
+['Пельмешки', 250, 60]
+];
+
+var store = Ext.create('Ext.data.ArrayStore', {
+
+fields: ['good','price','count'],
+data: myData
+});
+
+
+Ext.create('Ext.grid.Panel', {
+title: 'Товары',
+store: store,
+plugins:[{
+            ptype:'rowediting',
+            clicksToEdit: 1
+        }],
+
+        selType: 'rowmodel',
+        height: 250,
+        width: 400,
+        margin:10,
+  
+
+columns: [{
+           xtype:'rownumberer'
+          },
+{
+text : 'Товар',
+dataIndex: 'good',
+editor: {
+           allowBlank: false
+        }
+},
+{
+text : 'Цена',
+dataIndex: 'price',
+xtype:'numbercolumn',
+editor: {
+           allowBlank: false
+        }
+},
+{
+text : 'Кол-во',
+xtype:'numbercolumn',
+dataIndex: 'count',
+editor: {
+           allowBlank: false
+        }
+},{
+            xtype:'actioncolumn',
+            width:40,
+            items:[{
+                    icon:'del.png',
+                    handler:function (grid, rowIndex, colIndex) {
+                    store.removeAt(rowIndex);
+
+                 }
+                }]
+        },
+
+],
+
+// место для тулбара
+
+    tbar: [  // верхний тулбар с кнопками удаления и вставки
+          {
+            text: 'Новый Товар',
+            handler: function(){
+
+               store.insert(0, {good: ' ', price:0, count:0});
+               Editing.startEdit(0, 0, 0);
+            }
+        }
+      ],
+
+
+
+renderTo: 'grid1'
+});
+
+});
+
+
+</script>
+</head>
+  <body>
+
+        <div id="grid1"></div>
+    </body>
+</html>
+
